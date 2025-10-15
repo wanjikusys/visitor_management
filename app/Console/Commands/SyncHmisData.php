@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Services\HmisSyncService;
+use Illuminate\Console\Command;
+
+class SyncHmisData extends Command
+{
+    protected $signature = 'hmis:sync 
+                            {--force : Force sync even if already running}';
+    
+    protected $description = 'Sync HMIS data from remote SQL Server to local cache';
+
+    public function handle(HmisSyncService $syncService): int
+    {
+        $this->info('╔════════════════════════════════════════╗');
+        $this->info('║   HMIS Data Sync - Starting...        ║');
+        $this->info('╚════════════════════════════════════════╝');
+        $this->newLine();
+
+        $startTime = microtime(true);
+
+        try {
+            // Show progress
+            $this->info('📊 Syncing OPD Register...');
+            $results = $syncService->syncAll();
+
+            $this->newLine();
+            $this->info('✅ Sync Results:');
+            $this->table(
+                ['Module', 'Records Synced'],
+                [
+                    ['OPD Register', $results['opd']],
+                    ['Ward/IPD', $results['ward']],
+                    ['Discharges Done', $results['discharges']],
+                    ['Discharge Requests', $results['discharge_requests']],
+                ]
+            );
+
+            $duration = round(microtime(true) - $startTime, 2);
+            $total = array_sum($results);
+
+            $this->newLine();
+            $this->info("🎉 Total: {$total} records synced in {$duration}s");
+            $this->newLine();
+            $this->info('╔════════════════════════════════════════╗');
+            $this->info('║   Sync Completed Successfully! ✓      ║');
+            $this->info('╚════════════════════════════════════════╝');
+
+            return Command::SUCCESS;
+
+        } catch (\Exception $e) {
+            $this->error('❌ Sync failed: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+            return Command::FAILURE;
+        }
+    }
+}
