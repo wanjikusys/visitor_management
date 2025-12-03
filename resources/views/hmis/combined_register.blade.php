@@ -143,8 +143,7 @@
             <div class="bg-white shadow-lg ring-1 ring-gray-900/5 rounded-xl overflow-hidden h-fit">
                 <h3 class="p-4 text-lg font-semibold bg-blue-50 text-blue-800 border-b border-blue-200 flex justify-between items-center">
                     <span>Theatre / Daycase Register</span>
-                    <span class="text-xs text-blue-600" x-show="!isLoading" x-text="'(' + theatreFiltered.length + ')'"></span>
-                </h3>
+               </h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 text-sm">
                         <thead class="bg-blue-50">

@@ -36,7 +36,6 @@
             </div>
         @endif
 
-        <!-- Quick Stats - AT TOP -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg rounded-xl p-6 text-white">
                 <div class="flex items-center justify-between">
@@ -81,7 +80,6 @@
             </div>
         </div>
 
-        <!-- Roles Table -->
         <div class="bg-white shadow-lg rounded-xl overflow-hidden">
             <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                 <div class="flex items-center justify-between">
@@ -142,23 +140,38 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex items-center justify-end gap-2">
+                                        {{-- View Details (always available) --}}
                                         <a href="{{ route('admin.roles.show', $role) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition" title="View Details">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                             </svg>
                                         </a>
+                                        
+                                        {{-- Assign Users (always available) --}}
                                         <a href="{{ route('admin.roles.assign-users', $role) }}" class="inline-flex items-center px-3 py-1.5 bg-purple-100 text-purple-700 rounded-md hover:bg-purple-200 transition" title="Assign Users">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                                             </svg>
                                         </a>
-                                        <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition" title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                            </svg>
-                                        </a>
-                                        @if($role->name !== 'admin')
+
+                                        {{-- Conditional Edit (Locked for admin and super-admin) --}}
+                                        @if($role->name !== 'admin' && $role->name !== 'super-admin')
+                                            <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </a>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-400 rounded-md cursor-not-allowed" title="System role cannot be edited">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                                </svg>
+                                            </span>
+                                        @endif
+
+                                        {{-- Conditional Delete (Locked for admin and super-admin) --}}
+                                        @if($role->name !== 'admin' && $role->name !== 'super-admin')
                                             <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this role?')" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
@@ -169,7 +182,7 @@
                                                 </button>
                                             </form>
                                         @else
-                                            <span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-400 rounded-md cursor-not-allowed" title="Cannot delete admin role">
+                                            <span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-400 rounded-md cursor-not-allowed" title="System role cannot be deleted">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                                 </svg>
