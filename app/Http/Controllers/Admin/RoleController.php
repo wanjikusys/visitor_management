@@ -49,23 +49,12 @@ class RoleController extends Controller
             'description' => $validated['description'] ?? null,
         ]);
 
-        if (isset($validated['permissions'])) {
+        if (!empty($validated['permissions'])) {
             $role->permissions()->attach($validated['permissions']);
         }
 
         return redirect()->route('admin.roles.index')
             ->with('success', 'Role created successfully!');
-    }
-
-    /**
-     * Display the specified role
-     */
-    public function show(Role $role)
-    {
-        $role->load(['permissions', 'users']);
-        $permissionsByModule = $role->permissions->groupBy('module');
-        
-        return view('admin.roles.show', compact('role', 'permissionsByModule'));
     }
 
     /**
@@ -75,7 +64,7 @@ class RoleController extends Controller
     {
         $permissions = Permission::all()->groupBy('module');
         $rolePermissions = $role->permissions->pluck('id')->toArray();
-        
+
         return view('admin.roles.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
@@ -101,6 +90,9 @@ class RoleController extends Controller
         ]);
 
         $role->permissions()->sync($validated['permissions'] ?? []);
+
+        // Clear permission cache for all users with this role
+        $this->clearUserPermissionCache($role);
 
         return redirect()->route('admin.roles.index')
             ->with('success', 'Role updated successfully!');
@@ -156,6 +148,9 @@ class RoleController extends Controller
 
         $role->users()->attach($user->id);
 
+        // Clear cache for the affected user
+        $user->flushPermissionsCache();
+
         return back()->with('success', $user->name . ' has been assigned the ' . $role->display_name . ' role!');
     }
 
@@ -170,11 +165,14 @@ class RoleController extends Controller
 
         $role->users()->detach($user->id);
 
+        // Clear cache for the affected user
+        $user->flushPermissionsCache();
+
         return back()->with('success', $user->name . ' has been removed from the ' . $role->display_name . ' role!');
     }
 
     /**
-     * Update permissions for a role
+     * Update permissions for a role (AJAX or direct)
      */
     public function updatePermissions(Request $request, Role $role)
     {
@@ -185,6 +183,17 @@ class RoleController extends Controller
 
         $role->permissions()->sync($validated['permissions'] ?? []);
 
+        // Clear cache for ALL users with this role
+        $this->clearUserPermissionCache($role);
+
         return back()->with('success', 'Permissions updated successfully!');
+    }
+
+    // Helper: Clear permission cache for all users in a role
+    private function clearUserPermissionCache(Role $role)
+    {
+        foreach ($role->users as $user) {
+            $user->flushPermissionsCache();
+        }
     }
 }

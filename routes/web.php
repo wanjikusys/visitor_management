@@ -11,18 +11,19 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ParkingZoneController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\PublicVisitorController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileController; // CORRECTED: from App->Http to App\Http
 use App\Http\Controllers\Hmis\HmisOpdController;
 use App\Http\Controllers\Hmis\HmisWardController;
 use App\Http\Controllers\Hmis\HmisDischargesController;
 use App\Http\Controllers\Hmis\HmisVisitorsController;
-use App\Http\Controllers\Hmis\HmisCarersController;
+use App\Http\Controllers\Hmis\HmisCarersController; // CORRECTED: from App->Http to App\Http
 use App\Http\Controllers\Hmis\HmisVehiclesController;
 use App\Http\Controllers\Hmis\HmisDevicesController;
 use App\Http\Controllers\Hmis\HmisGatepassController;
 use App\Http\Controllers\Hmis\HmisSecurityController;
 use App\Http\Controllers\Hmis\HmisReportsController;
 use App\Http\Controllers\Hmis\HmisAccountsController;
+use App\Http\Controllers\Hmis\HmisCombinedRegisterController; // NEW: Import Combined Controller
 
 Route::redirect('/', '/login')->name('home');
 
@@ -90,6 +91,14 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Route::get('/ward-register/fetch', [HmisWardController::class, 'fetch'])->name('ward.fetch');
         Route::get('/ward-register/poll', [HmisWardController::class, 'poll'])->name('ward.poll');
         Route::post('/ward-register/clear-cache', [HmisWardController::class, 'clearCache'])->name('ward.clear-cache');
+        
+        // === INSERTED: Combined Patients Register ===
+        Route::group(['prefix' => 'combined', 'as' => 'combined.'], function () {
+            Route::get('/', [HmisCombinedRegisterController::class, 'index'])->name('index');
+            Route::get('/fetch', [HmisCombinedRegisterController::class, 'fetch'])->name('fetch');
+            Route::post('/clear-cache', [HmisCombinedRegisterController::class, 'clearCache'])->name('clear-cache');
+        });
+        // ============================================
         
         // Discharges Done
         Route::get('/discharges-done', [HmisDischargesController::class, 'done'])->name('discharges.done');

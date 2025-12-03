@@ -18,16 +18,16 @@ class Role extends Model
         return $this->belongsToMany(Permission::class, 'permission_role');
     }
 
-    public function hasPermission($permission)
+    public function hasPermission($permission): bool
     {
         if (is_string($permission)) {
             return $this->permissions->contains('name', $permission);
         }
 
-        return $this->permissions->contains('id', $permission->id);
+        return $this->permissions->contains('id', $permission->id ?? $permission);
     }
 
-    public function givePermissionTo($permission)
+    public function givePermissionTo($permission): void
     {
         if (is_string($permission)) {
             $permission = Permission::where('name', $permission)->firstOrFail();
@@ -38,12 +38,12 @@ class Role extends Model
         }
     }
 
-    public function revokePermissionTo($permission)
+    public function revokePermissionTo($permission): void
     {
         if (is_string($permission)) {
             $permission = Permission::where('name', $permission)->firstOrFail();
         }
 
-        $this->permissions()->detach($permission->id);
+        $this->permissions()->detach($permission->id ?? $permission);
     }
 }

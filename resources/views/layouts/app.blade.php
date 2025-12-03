@@ -29,7 +29,7 @@
                     <div class="flex items-center">
                         <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                         <span class="ml-3 text-lg font-semibold text-white">Visitor MS</span>
                     </div>
@@ -60,10 +60,10 @@
                     <!-- Dashboard -->
                     <a href="{{ route('admin.dashboard') }}"
                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition
-                              {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                             {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                         </svg>
                         Dashboard
                     </a>
@@ -73,11 +73,11 @@
                         <div x-data="{ open: {{ request()->routeIs('admin.visitors.*') ? 'true' : 'false' }} }">
                             <button @click="open = !open"
                                     class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition
-                                           {{ request()->routeIs('admin.visitors.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                                        {{ request()->routeIs('admin.visitors.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                                 <span class="flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                     </svg>
                                     Visitors
                                 </span>
@@ -105,11 +105,11 @@
                         <div x-data="{ open: {{ request()->routeIs('admin.vehicles.*') ? 'true' : 'false' }} }">
                             <button @click="open = !open"
                                     class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition
-                                           {{ request()->routeIs('admin.vehicles.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                                        {{ request()->routeIs('admin.vehicles.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                                 <span class="flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+                                                d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
                                     </svg>
                                     Vehicles
                                 </span>
@@ -136,11 +136,11 @@
                     <div x-data="{ open: {{ request()->routeIs('admin.assets.*') ? 'true' : 'false' }} }">
                         <button @click="open = !open"
                                 class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition
-                                       {{ request()->routeIs('admin.assets.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                                        {{ request()->routeIs('admin.assets.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                             <span class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                                 Assets
                             </span>
@@ -163,12 +163,12 @@
                     <!-- Parking Zones -->
                     <a href="{{ route('admin.parking-zones.index') }}"
                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition
-                              {{ request()->routeIs('admin.parking-zones.*') ? 'bg-blue-600 text-white shadow' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                             {{ request()->routeIs('admin.parking-zones.*') ? 'bg-blue-600 text-white shadow' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                         Parking Zones
                     </a>
@@ -181,11 +181,11 @@
                         <div x-data="{ open: {{ request()->routeIs('admin.hmis.*') ? 'true' : 'false' }} }">
                             <button @click="open = !open"
                                     class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition
-                                           {{ request()->routeIs('admin.hmis.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                                        {{ request()->routeIs('admin.hmis.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                                 <span class="flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M9 12h6m-6 4h6M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H9L7 6v12a2 2 0 002 2z"></path>
+                                                d="M9 12h6m-6 4h6M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H9L7 6v12a2 2 0 002 2z"></path>
                                     </svg>
                                     HMIS
                                 </span>
@@ -206,8 +206,8 @@
                                     <!-- Discharges Nested Submenu -->
                                     <div x-data="{ dischargesOpen: {{ request()->routeIs('admin.hmis.discharges.*') ? 'true' : 'false' }} }">
                                         <button @click="dischargesOpen = !dischargesOpen"
-                                                class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition
-                                                       {{ request()->routeIs('admin.hmis.discharges.*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700' }}">
+                                                 class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition
+                                                             {{ request()->routeIs('admin.hmis.discharges.*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700' }}">
                                             <span class="flex items-center">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -224,6 +224,12 @@
                                         </div>
                                     </div>
                                 @endif
+                                
+                                {{-- NEW LINK: All Patients Register (Combined View) --}}
+                                <a href="{{ route('admin.hmis.combined.index') }}" 
+                                   class="block px-3 py-2 text-sm rounded-md transition {{ request()->routeIs('admin.hmis.combined.*') ? 'text-blue-400 bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700' }}">
+                                    All Patients
+                                </a>
                                 
                                 @if(auth()->user()->hasPermission('hmis.visitors.view'))
                                     <a href="{{ route('admin.hmis.visitors.index') }}" class="block px-3 py-2 text-sm rounded-md transition {{ request()->routeIs('admin.hmis.visitors.*') ? 'text-blue-400 bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700' }}">Inpatient Visitors</a>
@@ -256,11 +262,11 @@
                         <div x-data="{ open: {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.roles.*') ? 'true' : 'false' }} }">
                             <button @click="open = !open"
                                     class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition
-                                           {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.roles.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                                        {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.roles.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                                 <span class="flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                     </svg>
                                     User Management
                                 </span>
@@ -270,7 +276,7 @@
                             </button>
                             <div x-show="open" x-collapse class="ml-6 mt-1 space-y-1">
                                 <a href="{{ route('admin.users.index') }}"
-                                   class="block px-3 py-2 text-sm rounded-md transition {{ request()->routeIs('admin.users.*') ? 'text-blue-400 bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700' }}">
+                                   class="block px-3 py-2 text-sm rounded-md transition {{ request()->routeIs('admin.users.index') ? 'text-blue-400 bg-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-700' }}">
                                     Users
                                 </a>
                                 <a href="{{ route('admin.roles.index') }}"
@@ -286,11 +292,11 @@
                         <div x-data="{ open: {{ request()->routeIs('admin.reports.*') && !request()->routeIs('admin.hmis.reports.*') ? 'true' : 'false' }} }">
                             <button @click="open = !open"
                                     class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition
-                                           {{ request()->routeIs('admin.reports.*') && !request()->routeIs('admin.hmis.reports.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                                        {{ request()->routeIs('admin.reports.*') && !request()->routeIs('admin.hmis.reports.*') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                                 <span class="flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
                                     Reports
                                 </span>
@@ -325,10 +331,10 @@
                     <!-- Profile -->
                     <a href="{{ route('profile.edit') }}"
                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition
-                              {{ request()->routeIs('profile.*') ? 'bg-blue-600 text-white shadow' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                             {{ request()->routeIs('profile.*') ? 'bg-blue-600 text-white shadow' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
                         Profile
                     </a>
@@ -340,7 +346,7 @@
                                 class="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-md transition hover:bg-red-600 hover:text-white">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
                             Logout
                         </button>
@@ -354,7 +360,7 @@
                     <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-md text-gray-600 hover:bg-gray-100" aria-label="Toggle sidebar">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M4 6h16M4 12h16M4 18h16"></path>
+                                    d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                     <div class="text-sm font-semibold text-gray-900 truncate">{{ config('app.name', 'Laravel') }}</div>

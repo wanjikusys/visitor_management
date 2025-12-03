@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -14,7 +16,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Keep for backward compatibility
+        'role',           // Legacy column - kept for backward compatibility
         'department',
         'is_active',
     ];
@@ -33,32 +35,59 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Legacy role check (backward compatible)
-     */
-    public function isAdmin()
-    {
-        // Check both old 'role' column and new roles relationship
-        return $this->role === 'admin' || $this->hasRole('admin');
-    }
+    // ──────────────────────────────────────────────────────────────
+    // RELATIONSHIPS
+    // ──────────────────────────────────────────────────────────────
 
-    /**
-     * Many-to-Many: User belongs to many Roles
-     */
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
 
+    public function hostedVisits()
+    {
+        return $this->hasMany(VisitorVisit::class, 'host_id');
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // CACHED PERMISSIONS (Fast & Real-time)
+    // ──────────────────────────────────────────────────────────────
+
     /**
-     * Check if user has a specific role
-     * 
-     * @param string|Role|array $role
-     * @return bool
+     * Get all permission names this user has via roles (cached forever)
      */
-    public function hasRole($role)
+    public function getPermissionsAttribute()
+    {
+        return Cache::rememberForever("user_permissions_{$this->id}", function () {
+            return $this->roles()
+                ->with('permissions')
+                ->get()
+                ->pluck('permissions')
+                ->flatten()
+                ->pluck('name')
+                ->unique()
+                ->values();
+        });
+    }
+
+    /**
+     * Flush permission cache (call this whenever roles/permissions change)
+     */
+    public function flushPermissionsCache(): void
+    {
+        Cache::forget("user_permissions_{$this->id}");
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // ROLE & PERMISSION CHECKS (Used in your sidebar!)
+    // ──────────────────────────────────────────────────────────────
+
+    public function hasRole($role): bool
     {
         if (is_string($role)) {
+            // Also check legacy 'role' column for old data
+            if ($this->role === $role) return true;
+
             return $this->roles->contains('name', $role);
         }
 
@@ -68,78 +97,39 @@ class User extends Authenticatable
 
         if (is_array($role)) {
             foreach ($role as $r) {
-                if ($this->hasRole($r)) {
-                    return true;
-                }
+                if ($this->hasRole($r)) return true;
             }
         }
 
         return false;
     }
 
-    /**
-     * Check if user has a specific permission
-     * 
-     * @param string $permission
-     * @return bool
-     */
-    public function hasPermission($permission)
+    public function hasPermission(string $permission): bool
     {
-        // Load roles with permissions if not already loaded
-        if (!$this->relationLoaded('roles')) {
-            $this->load('roles.permissions');
-        }
-
-        foreach ($this->roles as $role) {
-            if ($role->permissions->contains('name', $permission)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->permissions->contains($permission);
     }
 
-    /**
-     * Check if user has any of the given permissions
-     * 
-     * @param array $permissions
-     * @return bool
-     */
-    public function hasAnyPermission($permissions)
+    public function hasAnyPermission(array $permissions): bool
     {
-        foreach ($permissions as $permission) {
-            if ($this->hasPermission($permission)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->permissions->intersect($permissions)->isNotEmpty();
     }
 
-    /**
-     * Check if user has all of the given permissions
-     * 
-     * @param array $permissions
-     * @return bool
-     */
-    public function hasAllPermissions($permissions)
+    public function hasAllPermissions(array $permissions): bool
     {
-        foreach ($permissions as $permission) {
-            if (!$this->hasPermission($permission)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->permissions->intersect($permissions)->count() === count($permissions);
     }
 
-    /**
-     * Assign a role to user
-     * 
-     * @param string|Role $role
-     * @return void
-     */
-    public function assignRole($role)
+    // Backward compatibility
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin' || $this->hasRole('admin');
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // ROLE MANAGEMENT
+    // ──────────────────────────────────────────────────────────────
+
+    public function assignRole($role): void
     {
         if (is_string($role)) {
             $role = Role::where('name', $role)->firstOrFail();
@@ -147,40 +137,28 @@ class User extends Authenticatable
 
         if (!$this->hasRole($role)) {
             $this->roles()->attach($role->id);
+            $this->flushPermissionsCache();
         }
     }
 
-    /**
-     * Remove a role from user
-     * 
-     * @param string|Role $role
-     * @return void
-     */
-    public function removeRole($role)
+    public function removeRole($role): void
     {
         if (is_string($role)) {
             $role = Role::where('name', $role)->firstOrFail();
         }
 
         $this->roles()->detach($role->id);
+        $this->flushPermissionsCache();
     }
 
-    /**
-     * Sync roles (replace all existing roles)
-     * 
-     * @param array $roles
-     * @return void
-     */
-    public function syncRoles($roles)
+    public function syncRoles(array $roles): void
     {
         $roleIds = [];
-        
+
         foreach ($roles as $role) {
             if (is_string($role)) {
-                $roleModel = Role::where('name', $role)->first();
-                if ($roleModel) {
-                    $roleIds[] = $roleModel->id;
-                }
+                $model = Role::where('name', $role)->first();
+                if ($model) $roleIds[] = $model->id;
             } elseif ($role instanceof Role) {
                 $roleIds[] = $role->id;
             } elseif (is_numeric($role)) {
@@ -189,20 +167,19 @@ class User extends Authenticatable
         }
 
         $this->roles()->sync($roleIds);
+        $this->flushPermissionsCache();
     }
 
-    /**
-     * Get primary role display name
-     * 
-     * @return string
-     */
-    public function getPrimaryRoleAttribute()
+    // ──────────────────────────────────────────────────────────────
+    // DISPLAY HELPERS
+    // ──────────────────────────────────────────────────────────────
+
+    public function getPrimaryRoleAttribute(): string
     {
-        if ($this->roles && $this->roles->count() > 0) {
+        if ($this->roles->count() > 0) {
             return $this->roles->first()->display_name;
         }
 
-        // Fallback to old role column
         if ($this->role) {
             return ucfirst($this->role);
         }
@@ -210,49 +187,27 @@ class User extends Authenticatable
         return 'Member';
     }
 
-    /**
-     * Visitor visits hosted by this user
-     */
-    public function hostedVisits()
-    {
-        return $this->hasMany(VisitorVisit::class, 'host_id');
-    }
+    // ──────────────────────────────────────────────────────────────
+    // SCOPES
+    // ──────────────────────────────────────────────────────────────
 
-    /**
-     * Check if user is active
-     * 
-     * @return bool
-     */
-    public function isActive()
-    {
-        return $this->is_active;
-    }
-
-    /**
-     * Scope: Only active users
-     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
-    /**
-     * Scope: Users with specific role
-     */
     public function scopeWithRole($query, $role)
     {
-        return $query->whereHas('roles', function($q) use ($role) {
-            $q->where('name', $role);
-        });
+        return $query->whereHas('roles', fn($q) => $q->where('name', $role));
     }
 
-    /**
-     * Scope: Users with specific permission
-     */
     public function scopeWithPermission($query, $permission)
     {
-        return $query->whereHas('roles.permissions', function($q) use ($permission) {
-            $q->where('name', $permission);
-        });
+        return $query->whereHas('roles.permissions', fn($q) => $q->where('name', $permission));
+    }
+
+    public function isActive(): bool
+    {
+        return $this->is_active;
     }
 }
